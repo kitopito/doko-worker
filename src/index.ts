@@ -1,6 +1,11 @@
 import { Hono } from 'hono'
+import { Bindings } from 'hono/types';
 
-const app = new Hono()
+export interface Env {
+    DB: D1Database;
+}
+
+const app = new Hono<{Bindings: Env}>()
 
 app.get('/', (c) => c.text('Hello Hono!'))
 
