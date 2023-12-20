@@ -2,7 +2,8 @@
   "scripts": {
     "dev": "wrangler dev src/index.ts",
     "deploy": "wrangler deploy --minify src/index.ts",
-    "generate": "drizzle-kit generate:sqlite --schema=src/schema.ts",
+    "migrate": "wrangler d1 migrations apply doko-base",
+    "generate": "drizzle-kit generate:sqlite --out migrations --schema=src/schema.ts",
     "up": "drizzle-kit up:sqlite --schema=src/schema.ts"
   },
   "dependencies": {

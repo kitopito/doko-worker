@@ -8,6 +8,27 @@
       "when": 1703019123863,
       "tag": "0000_glossy_blue_blade",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1703100778266,
+      "tag": "0001_wild_devos",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1703100951331,
+      "tag": "0002_pretty_ironclad",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1703101812686,
+      "tag": "0003_quick_tempest",
+      "breakpoints": true
     }
   ]
 }
