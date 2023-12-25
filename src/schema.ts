@@ -12,6 +12,7 @@ export const teacher = sqliteTable('teacher', {
   name: text('name').notNull(),
   updatedAt: integer('updated_at').notNull(),
   statusId: integer('status_id').notNull().references(() => status.id),
+  deviceAddress: integer('device_address').notNull(),
 });
 
 // Statusテーブル

@@ -1,0 +1,1 @@
+ALTER TABLE teacher ADD `device_address` integer;
