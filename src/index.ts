@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import { cors } from 'hono/cors'
 import { Bindings } from 'hono/types';
 import { drizzle } from 'drizzle-orm/d1';
 import { config, sensor, status, teacher, users } from './schema';
@@ -16,6 +17,19 @@ type Env = {
 
 const app = new Hono<{Bindings: Env}>()
 
+// 最初に書かないといけない
+app.use(
+    '/teachers',
+    cors({
+      origin: ['https://dokosen.pages.dev', 'http://localhost:5173'], // 本番と開発環境のURL
+      allowHeaders: ['X-Custom-Header', 'Upgrade-Insecure-Requests', 'Content-Type'],
+      allowMethods: ['POST', 'GET', 'OPTIONS'],
+      exposeHeaders: ['Content-Length', 'X-Kuma-Revision'],
+      maxAge: 600,
+      credentials: true,
+    })
+)
+
 app.get('/', async (c) => {
     return new Response("hoge");
     const db = drizzle(c.env.DB);
@@ -24,6 +38,7 @@ app.get('/', async (c) => {
 });
 
 app.get('/teachers', async (c) => {
+    console.log(c.req);
     const db = drizzle(c.env.DB);
     const result = await db.select({
         id: teacher.id,
