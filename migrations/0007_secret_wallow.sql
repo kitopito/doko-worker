@@ -1,0 +1,1 @@
+ALTER TABLE `log` RENAME COLUMN `isValidData` TO `is_valid_data`;

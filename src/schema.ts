@@ -39,3 +39,12 @@ export const config = sqliteTable('config', {
     pk: primaryKey({ columns: [table.teacherId, table.statusId, table.sensorId] }),
   };
 });
+
+// logテーブル
+export const log = sqliteTable('log', {
+  id: integer('id').primaryKey({autoIncrement: true}).notNull(),
+  isValidData: integer("is_valid_data").notNull(),
+  deviceAddress: integer('device_address'),
+  log: text('log').notNull(),
+  timeStamp: integer('time_stamp').notNull(),
+});

@@ -43,6 +43,20 @@
       "when": 1703479610744,
       "tag": "0005_slow_richard_fisk",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1704826355349,
+      "tag": "0006_cultured_spectrum",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1704827132113,
+      "tag": "0007_secret_wallow",
+      "breakpoints": true
     }
   ]
 }
