@@ -178,10 +178,13 @@ app.post('/config', async (c) => {
         await c.req.json<{teacherId: number, config: ConfigPack}>();
     console.log(param);
     const records = toConfigRecords(param.teacherId, param.config);
+    console.log(records);
     if(records == null) {
         return
     } else {
+        const r: D1Result<unknown>[] = [];
         records.forEach(async (configRecord, index) => {
+            console.log("設定");
             const res = await db.update(config)
                 .set({configValue: configRecord.configValue})
                 .where(and(
@@ -189,6 +192,8 @@ app.post('/config', async (c) => {
                     eq(config.statusId, configRecord.statusId),
                     eq(config.sensorId, configRecord.sensorId)
                 ));
+            console.log(res);
+            r.push(res);
         });
 
         /*
@@ -196,6 +201,7 @@ app.post('/config', async (c) => {
             .where(eq(config.teacherId, param.teacherId));
         const res = await db.insert(config).values(records);
         */
+        return Response.json({hoge: r.toString()});
     }
     return new Response("ok");
 });
