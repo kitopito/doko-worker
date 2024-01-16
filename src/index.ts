@@ -3,7 +3,7 @@ import { cors } from 'hono/cors'
 import { Bindings } from 'hono/types';
 import { drizzle } from 'drizzle-orm/d1';
 import { config, log, sensor, status, teacher, users } from './schema';
-import { desc, eq, or } from 'drizzle-orm';
+import { and, desc, eq, or } from 'drizzle-orm';
 import { ConfigPack, ExConfigRecord, calculateError, toConfigPack, toConfigRecords } from './model/config';
 
 /*
@@ -181,9 +181,21 @@ app.post('/config', async (c) => {
     if(records == null) {
         return
     } else {
+        records.forEach(async (configRecord, index) => {
+            const res = await db.update(config)
+                .set({configValue: configRecord.configValue})
+                .where(and(
+                    eq(config.teacherId, configRecord.teacherId),
+                    eq(config.statusId, configRecord.statusId),
+                    eq(config.sensorId, configRecord.sensorId)
+                ));
+        });
+
+        /*
         const del = await db.delete(config)
             .where(eq(config.teacherId, param.teacherId));
         const res = await db.insert(config).values(records);
+        */
     }
     return new Response("ok");
 });
