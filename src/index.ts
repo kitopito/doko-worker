@@ -57,11 +57,15 @@ app.post('/sensors', async (c) => {
     const timeStampNow: number = Math.floor(Date.now() / 1000); // set Unix Time (second)
 
     const check = await c.req.json<{isValidData: boolean, log: string}>();
-    if(check.isValidData == false) {
-        const res = await db.insert(log).values(
-            {isValidData: 0, log: check.log, timeStamp: timeStampNow}
-        );
-        return new Response("ok");
+    try {
+        if(check.isValidData == false) {
+            const res = await db.insert(log).values(
+                {isValidData: 0, log: check.log, timeStamp: timeStampNow}
+            );
+            return new Response("ok");
+        }
+    } catch(e) {
+        console.log(e.message)
     }
 
     const param = 
@@ -70,11 +74,22 @@ app.post('/sensors', async (c) => {
 //    const sensorValues = c.req.param('value');
     const teacherInfo = await db.select().from(teacher).where(eq(teacher.deviceAddress, param.deviceAddress));
     const sensors =  await db.select().from(sensor).where(eq(sensor.teacherId, teacherInfo[0].id));
+    let sensorInfoIndex = 0;
+    for(const sensorInfo of sensors) {
+        console.log(param.value[sensorInfoIndex])
+        const res = await db.update(sensor)
+            .set({value: param.value[sensorInfoIndex]})
+            .where(eq(sensor.id, sensors[sensorInfoIndex].id));
+        sensorInfoIndex++;
+        console.log("セットセンサ　" + sensorInfo.id.toString())
+    }
+    /*
     sensors.forEach(async (sensorInfo, index) => {
         const res = await db.update(sensor)
             .set({value: param.value[index]})
             .where(eq(sensor.id, sensors[index].id));
     });
+    */
 
     const configs = toConfigPack(
         await db.select({
@@ -183,7 +198,9 @@ app.post('/config', async (c) => {
         return
     } else {
         const r: D1Result<unknown>[] = [];
-        records.forEach(async (configRecord, index) => {
+//        records.forEach(async (configRecord, index) => {
+//        });
+        for(const configRecord of records) {
             console.log("設定");
             const res = await db.update(config)
                 .set({configValue: configRecord.configValue})
@@ -194,13 +211,15 @@ app.post('/config', async (c) => {
                 ));
             console.log(res);
             r.push(res);
-        });
+        }
 
         /*
         const del = await db.delete(config)
             .where(eq(config.teacherId, param.teacherId));
         const res = await db.insert(config).values(records);
         */
+       console.log("レスポンス");
+       console.log(r);
         return Response.json({hoge: r.toString()});
     }
     return new Response("ok");
